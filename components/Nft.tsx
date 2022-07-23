@@ -1,38 +1,42 @@
-import {
-  Box,
-  Heading,
-  Image,
-} from '@chakra-ui/react'
+import { Box, Heading, Image } from '@chakra-ui/react'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { TokenType } from '../types'
 
 type Props = {
-  id: number
+  token: TokenType
 }
 
-export default function Nft({ id }: Props) {
-
+export default function Nft({ token }: Props) {
   const router = useRouter()
 
-  const handleClick = () => {
-    router.replace({
-      query: { ...router.query, id: id.toString() },
-    })
-  }
+  const { tokenId, image, name } = token
+
   return (
-    <>
-      <Box onClick={handleClick}>
+    <Link
+      href={{
+        pathname: '/[contract_address]/[tokenId]',
+        query: { contract_address: token.collection.address, tokenId },
+      }}
+    >
+      <Box
+        cursor="pointer"
+        _hover={{
+          opacity: 0.8,
+          transition: 'opacity 0.2s ease-in-out',
+        }}
+      >
         <Image
-          src="https://looksrare.mo.cloudinary.net/0x23581767a106ae21c074b2276D25e5C3e136a68b/0x0ff79f84ad87345f743cad85943f05c774b81271eab552d708b181fb8deebb5f?resource_type=image&f=auto&c=limit&w=768&q=auto:best"
+          src={image.src}
           height="auto"
           width="100%"
           borderRadius={8}
           mb={4}
         />
         <Heading size="md" color="gray.600">
-          {id}
+          {name}
         </Heading>
       </Box>
-      {/* <NftModal id={id} isOpen={isOpen} onClose={onClose} /> */}
-    </>
+    </Link>
   )
 }

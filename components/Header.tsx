@@ -5,7 +5,7 @@ export default function Header() {
   return (
     <Flex as="nav" alignItems="center" justifyContent="space-between">
       <Link href="/">
-        <Heading cursor="pointer">NFT Viewer</Heading>
+        <Heading cursor="pointer" size="md">NFT Viewer</Heading>
       </Link>
 
       <Button bg="blue.400" color="white">

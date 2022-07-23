@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Text } from '@chakra-ui/react'
+import { Box, Button, Flex, Grid, Tag, Text } from '@chakra-ui/react'
 import {
   Modal,
   ModalOverlay,
@@ -10,19 +10,38 @@ import {
   Image,
   Heading,
 } from '@chakra-ui/react'
+import useToken from '../hooks/useToken'
+import { AttributeType } from '../types'
 
 type Props = {
   isOpen: boolean
   onClose: () => void
-  id: number
+  id: string
+  collectionAddress: string
 }
 
-export default function NftModal({ id, isOpen, onClose }: Props) {
+export default function NftModal({
+  id,
+  collectionAddress,
+  isOpen,
+  onClose,
+}: Props) {
+  const { status, data, error, isFetching } = useToken({
+    contractAddress: collectionAddress,
+    tokenId: id,
+  })
+
+  if (isFetching) {
+    return <Box>Loading...</Box>
+  }
+
+  const { name, image, description, attributes } = data
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="xl">
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Modal Title #{id}</ModalHeader>
+        <ModalHeader> Moonbirds {name}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <Flex
@@ -32,7 +51,7 @@ export default function NftModal({ id, isOpen, onClose }: Props) {
             }}
           >
             <Image
-              src="https://looksrare.mo.cloudinary.net/0x23581767a106ae21c074b2276D25e5C3e136a68b/0x0ff79f84ad87345f743cad85943f05c774b81271eab552d708b181fb8deebb5f?resource_type=image&f=auto&c=limit&w=768&q=auto:best"
+              src={image?.src}
               height={{
                 base: 'auto',
                 md: '200px',
@@ -41,13 +60,50 @@ export default function NftModal({ id, isOpen, onClose }: Props) {
               borderRadius={8}
               mb={4}
             />
-            <Box p="4">
-              <Heading size="md" color="gray.600">
-                Moonbirds #{id}
+            <Box
+              pl={{
+                base: 0,
+                md: 4,
+              }}
+              flex="1"
+            >
+              <Heading size="md" color="gray.600" mb={4}>
+                Moonbirds {name}
               </Heading>
-              <Text>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+              <Text>{description}</Text>
+              <Text
+                mb={2}
+                color="
+                gray.600
+              "
+              >
+                Attributes
               </Text>
+              <Grid
+                gap={2}
+                flexWrap="wrap"
+                templateColumns={{
+                  base: '1fr',
+                  md: 'repeat(2, 1fr)',
+                }}
+              >
+                {attributes.map((attribute: AttributeType) => (
+                  <Box
+                    key={attribute.id}
+                    p={2}
+                    flexDirection="column"
+                    alignItems="start"
+                    gap={1}
+                    backgroundColor="gray.100"
+                    borderRadius={4}
+                  >
+                    <Text display="block" color="gray.500" fontSize="sm">
+                      {attribute.traitType}
+                    </Text>
+                    <Text fontSize="sm">{attribute.value}</Text>
+                  </Box>
+                ))}
+              </Grid>
             </Box>
           </Flex>
         </ModalBody>

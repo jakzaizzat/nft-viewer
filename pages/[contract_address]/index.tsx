@@ -1,80 +1,49 @@
-import {
-  Box,
-  Container,
-  Grid,
-  GridItem,
-  Heading,
-  useDisclosure,
-} from '@chakra-ui/react'
+import { Box, Container, Grid, GridItem } from '@chakra-ui/react'
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
-import Header from '../../components/Header'
+import CollectionHeader from '../../components/CollectionHeader'
+import Layout from '../../components/Layout'
 import Nft from '../../components/Nft'
-import NftModal from '../../components/NftModal'
+import useCollections from '../../hooks/useCollections'
+import { TokenType } from '../../types'
 
 const CollectionPage: NextPage = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  const router = useRouter()
-  const { query } = router
+  const { query } = useRouter()
+  const { contract_address } = query
 
-  useEffect(() => {
-    if (query?.id) {
-      onOpen()
-      return
-    }
+  const { data: tokens, isFetching } = useCollections(contract_address as string)
 
-    onClose()
-    // TODO: reset query
-  }, [query])
+  // TODO: Should replace with collection graphql query
+  // const collection = useMemo(() => {
+  //   if (!isSuccess) return {}
+  //   if ((tokens || []).length < 1) return {}
+  //   return tokens[0].collection as CollectionType
+  // }, [tokens, isSuccess])
+
+  if (isFetching) {
+    return <div>Loading...</div>
+  }
 
   return (
-    <Box w="100vw" minH="100vh" bg="gray.100">
-      <Container p={4}>
-        <Header />
-        <Box py="16">
-          <Heading size="md" mb={8}>
-            Collection Page
-          </Heading>
-          <Grid
-            templateColumns={{
-              base: '1fr',
-              md: 'repeat(2, 1fr)',
-              lg: 'repeat(3, 1fr)',
-            }}
-            gap={6}
-          >
-            <GridItem>
-              <Nft id={1} />
+    <Layout>
+      <Box py="16">
+        {/* {collection && <CollectionHeader collection={collection} />} */}
+        <Grid
+          templateColumns={{
+            base: '1fr',
+            md: 'repeat(2, 1fr)',
+            lg: 'repeat(3, 1fr)',
+          }}
+          gap={6}
+        >
+          {tokens?.map((token: TokenType) => (
+            <GridItem key={token.tokenId}>
+              <Nft token={token} />
             </GridItem>
-            <GridItem>
-              <Nft id={2} />
-            </GridItem>
-            <GridItem>
-              <Nft id={3} />
-            </GridItem>
-            <GridItem>
-              <Nft id={4} />
-            </GridItem>
-            <GridItem>
-              <Nft id={5} />
-            </GridItem>
-            <GridItem>
-              <Nft id={6} />
-            </GridItem>
-            <GridItem>
-              <Nft id={7} />
-            </GridItem>
-          </Grid>
-        </Box>
-
-        <NftModal
-          isOpen={isOpen}
-          onClose={onClose}
-          id={parseInt(query?.id as string)}
-        />
-      </Container>
-    </Box>
+          ))}
+        </Grid>
+      </Box>
+    </Layout>
   )
 }
 
