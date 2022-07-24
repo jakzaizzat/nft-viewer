@@ -33,5 +33,7 @@ export default function useCollections(contractAddress: string) {
     )
 
     return tokens
+  }, {
+    enabled: !!contractAddress ,
   })
 }
