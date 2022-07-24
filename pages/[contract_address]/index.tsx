@@ -25,11 +25,6 @@ const CollectionPage: NextPage = () => {
     return <div>Error</div>
   }
 
-  if (!data) {
-    notify('Collection not found')
-    return <div>Collection not found</div>
-  }
-
   const { tokens } = data || {}
 
   return (

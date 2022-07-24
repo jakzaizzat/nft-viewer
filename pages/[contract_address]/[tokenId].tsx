@@ -28,7 +28,7 @@ export default function NftDetailPage() {
   const { tokenId, contract_address } = router.query
   const notify = useNotify()
 
-  const { data, isError, isFetching } = useToken({
+  const { data, isError, isFetching, isSuccess } = useToken({
     contractAddress: contract_address as string,
     tokenId: tokenId as string,
   })
@@ -54,12 +54,7 @@ export default function NftDetailPage() {
     notify('Error fetching this token')
     return <div>Error</div>
   }
-
-  if (!token) {
-    notify('Token not found')
-    return <div>Token not found</div>
-  }
-
+  
   const {
     image,
     name,
