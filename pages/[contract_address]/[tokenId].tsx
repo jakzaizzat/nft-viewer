@@ -48,9 +48,9 @@ export default function NftDetailPage() {
     return <Box>Loading...</Box>
   }
 
-  const { token, success } = data || {}
+  const { token } = data || {}
 
-  if (isError || !success) {
+  if (isError) {
     notify('Error fetching this token')
     return <div>Error</div>
   }

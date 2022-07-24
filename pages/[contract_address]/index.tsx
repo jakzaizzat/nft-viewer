@@ -20,9 +20,9 @@ const CollectionPage: NextPage = () => {
     return <div>Loading...</div>
   }
 
-  const { tokens, success }  = data || {}
+  const { tokens }  = data || {}
 
-  if (isError || !success) {
+  if (isError) {
     notify('Error fetching this collection')
     return <div>Error</div>
   }
