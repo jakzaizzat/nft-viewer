@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import request, { gql } from 'graphql-request'
+import { BASE_API_URL } from '../constant'
 
-const BASE_API_URL = 'https://graphql.looksrare.org/graphql'
 
 export default function useCollections(contractAddress: string) {
   return useQuery(['collections', { contractAddress }], async () => {

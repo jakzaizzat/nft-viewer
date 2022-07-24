@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import request, { gql } from 'graphql-request'
-
-const BASE_API_URL = 'https://graphql.looksrare.org/graphql'
+import { BASE_API_URL } from '../constant'
 
 type Props = {
   contractAddress: string
@@ -61,3 +60,4 @@ export default function useToken({ contractAddress, tokenId }: Props) {
     },
   )
 }
+
