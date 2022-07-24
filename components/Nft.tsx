@@ -1,6 +1,5 @@
 import { Box, Heading, Image } from '@chakra-ui/react'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import { TokenType } from '../types'
 
 type Props = {
@@ -8,17 +7,10 @@ type Props = {
 }
 
 export default function Nft({ token }: Props) {
-  const router = useRouter()
-
   const { tokenId, image, name } = token
 
   return (
-    <Link
-      href={{
-        pathname: '/[contract_address]/[tokenId]',
-        query: { contract_address: token.collection.address, tokenId },
-      }}
-    >
+    <Link href={`/${token.collection.address}/${tokenId}`}>
       <Box
         cursor="pointer"
         _hover={{
