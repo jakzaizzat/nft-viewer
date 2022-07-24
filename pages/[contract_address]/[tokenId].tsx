@@ -1,17 +1,26 @@
 import {
   Flex,
   Heading,
-  Grid,
   Image,
   Box,
   Text,
-  Container,
   Button,
+  Grid,
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
 } from '@chakra-ui/react'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { useMemo } from 'react'
 import Layout from '../../components/Layout'
 import AttributesList from '../../components/Token/AttributesList'
+import TokenCollection from '../../components/Token/TokenCollection'
+import TokenOwnerSection from '../../components/Token/TokenOwnerSection'
+import TokenPrice from '../../components/Token/TokenPrice'
 import useToken from '../../hooks/useToken'
+import useTokenOwner from '../../hooks/useTokenOwner'
+import { OwnerType, TokenType } from '../../types'
 
 export default function NftDetailPage() {
   const { query } = useRouter()
@@ -22,15 +31,45 @@ export default function NftDetailPage() {
     tokenId: tokenId as string,
   })
 
+  const { data: owners } = useTokenOwner({
+    contractAddress: contract_address as string,
+    tokenId: tokenId as string,
+  })
+
+  const currentOwner = useMemo(() => {
+    if (!owners) return null
+    console.log(owners)
+
+    // TODO: Should handle NFT with multiple owners
+    return owners[0].owner
+  }, [owners])
+
   if (isFetching) {
     return <Box>Loading...</Box>
   }
 
-  const { image, name, description, attributes, ask, collection } = data
+  const {
+    image,
+    name,
+    description,
+    attributes,
+    ask,
+    collection,
+  } = data as TokenType
 
   return (
     <Layout>
-      <Flex>
+      <Breadcrumb mb={4}>
+        <BreadcrumbItem>
+          <BreadcrumbLink as={Link} href={`/${contract_address}`}>
+            {collection.name}
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbItem isCurrentPage>
+          <BreadcrumbLink href={``}>{tokenId}</BreadcrumbLink>
+        </BreadcrumbItem>
+      </Breadcrumb>
+      <Flex justifyContent="center">
         <Box display="grid" gap={4}>
           <Flex
             flexDirection={{
@@ -59,13 +98,10 @@ export default function NftDetailPage() {
               gap={4}
             >
               <Heading size="xl" color="gray.600" mb={4}>
-                Moonbirds {name}
+                {name}
               </Heading>
-              <Text>{description}</Text>
-
-              <Text size="sm" color="gray.500" mb={4}>
-                Current Price: {ask.price} {ask.currency}
-              </Text>
+              <Text mb={4}>{description}</Text>
+              {ask && <TokenPrice ask={ask} />}
               <Button
                 as="a"
                 href={`https://looksrare.org/collections/${contract_address}/${tokenId}`}
@@ -78,35 +114,12 @@ export default function NftDetailPage() {
                   bg: 'green.600',
                 }}
               >
-                Buy on LooksRare
+                {ask ? 'Buy' : 'View'} on LooksRare
               </Button>
-
-              <Flex
-                bg="gray.50"
-                alignItems="center"
-                p={4}
-                borderRadius={4}
-                gap={4}
-              >
-                <Image
-                  src={collection.logo.src}
-                  height="40px"
-                  width="40px"
-                  borderRadius="full"
-                />
-                <Box>
-                  <Text fontWeight="semibold">{collection.name}</Text>
-                  <Text color="gray.600">
-                    {collection.description} asdasdasdasd
-                  </Text>
-                  <Text>
-                    <Text fontWeight="semibold" display="inline-block">
-                      {collection.totalSupply}
-                    </Text>{' '}
-                    items
-                  </Text>
-                </Box>
-              </Flex>
+              <Grid gap={4}>
+                <TokenOwnerSection address={currentOwner?.address} />
+                <TokenCollection collection={collection} />
+              </Grid>
             </Box>
           </Flex>
 

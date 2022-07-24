@@ -9,7 +9,6 @@ type Props = {
 }
 
 export default function useToken({ contractAddress, tokenId }: Props) {
-  console.log('useToken', contractAddress, tokenId)
 
   return useQuery(
     ['token', { contractAddress, tokenId }],
