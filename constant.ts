@@ -2,6 +2,7 @@ export const BASE_API_URL = 'https://graphql.looksrare.org/graphql'
 
 // TODO: Replace with api key
 export const LOOKSRARE_HTTP_HEADER = {
+  // 'X-LooksRare-Api-Key': process.env.NEXT_PUBLIC_LOOKSRARE_API_KEY,
   accept: '*/*',
   'accept-encoding': 'gzip, deflate, br',
   'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8',
