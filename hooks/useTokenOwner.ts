@@ -16,7 +16,7 @@ export default function useTokenOwner({ contractAddress, tokenId }: Props) {
       return response.owners
     },
     {
-      enabled: !!contractAddress && !!tokenId,
+      enabled: !!tokenId,
     },
   )
 }

@@ -16,6 +16,7 @@ export default function useToken({ contractAddress, tokenId }: Props) {
       return response
     },
     {
+      enabled: !!tokenId,
       refetchOnWindowFocus: false,
       refetchOnMount: false,
     },
