@@ -1,33 +1,34 @@
-import { Box, Container, Grid, GridItem } from '@chakra-ui/react'
+import { Box, Grid, GridItem } from '@chakra-ui/react'
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import CollectionHeader from '../../components/CollectionHeader'
 import Layout from '../../components/Layout'
 import Nft from '../../components/Nft'
 import useCollections from '../../hooks/useCollections'
+import useNotify from '../../hooks/useNotify'
 import { TokenType } from '../../types'
 
 const CollectionPage: NextPage = () => {
-  const { query } = useRouter()
-  const { contract_address } = query
+  const router = useRouter()
+  const notify = useNotify()
 
-  const { data: tokens, isFetching } = useCollections(contract_address as string)
-
-  // TODO: Should replace with collection graphql query
-  // const collection = useMemo(() => {
-  //   if (!isSuccess) return {}
-  //   if ((tokens || []).length < 1) return {}
-  //   return tokens[0].collection as CollectionType
-  // }, [tokens, isSuccess])
+  const { contract_address } = router.query
+  const { data: tokens, isFetching, isError } = useCollections(
+    contract_address as string,
+  )
 
   if (isFetching) {
     return <div>Loading...</div>
   }
 
+  if (isError) {
+    notify('Error fetching this collection')
+    router.push('/')
+    return <div>Error</div>
+  }
+
   return (
     <Layout>
       <Box py="16">
-        {/* {collection && <CollectionHeader collection={collection} />} */}
         <Grid
           templateColumns={{
             base: '1fr',

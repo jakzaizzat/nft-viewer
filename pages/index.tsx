@@ -7,7 +7,7 @@ import Layout from '../components/Layout'
 
 const Home: NextPage = () => {
   const [contractAddress, setContractAddress] = useState(
-    '0x23581767a106ae21c074b2276d25e5c3e136a68b',
+    '0x134460d32fc66a6d84487c20dcd9fdcf92316017', // Woodies NFT contract address
   )
   const router = useRouter()
 

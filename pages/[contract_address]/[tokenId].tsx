@@ -18,15 +18,17 @@ import AttributesList from '../../components/Token/AttributesList'
 import TokenCollection from '../../components/Token/TokenCollection'
 import TokenOwnerSection from '../../components/Token/TokenOwnerSection'
 import TokenPrice from '../../components/Token/TokenPrice'
+import useNotify from '../../hooks/useNotify'
 import useToken from '../../hooks/useToken'
 import useTokenOwner from '../../hooks/useTokenOwner'
-import { OwnerType, TokenType } from '../../types'
+import { TokenType } from '../../types'
 
 export default function NftDetailPage() {
-  const { query } = useRouter()
-  const { tokenId, contract_address } = query
+  const router = useRouter()
+  const { tokenId, contract_address } = router.query
+  const notify = useNotify()
 
-  const { status, data, error, isFetching } = useToken({
+  const { data, isError, isFetching } = useToken({
     contractAddress: contract_address as string,
     tokenId: tokenId as string,
   })
@@ -48,6 +50,11 @@ export default function NftDetailPage() {
     return <Box>Loading...</Box>
   }
 
+  if (isError) {
+    notify('Error fetching this token')
+    return <div>Error</div>
+  }
+
   const {
     image,
     name,
@@ -66,11 +73,11 @@ export default function NftDetailPage() {
           </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbItem isCurrentPage>
-          <BreadcrumbLink href={``}>{tokenId}</BreadcrumbLink>
+          <BreadcrumbLink>{tokenId}</BreadcrumbLink>
         </BreadcrumbItem>
       </Breadcrumb>
       <Flex justifyContent="center">
-        <Box display="grid" gap={4}>
+        <Box display="grid" gap={4} w="full">
           <Flex
             flexDirection={{
               base: 'column',

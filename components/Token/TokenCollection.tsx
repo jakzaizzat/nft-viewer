@@ -18,8 +18,8 @@ export default function TokenCollection({ collection }: Props) {
     >
       <Image
         src={collection.logo.src}
-        height="80px"
-        width="80px"
+        height="50px"
+        width="50px"
         borderRadius="full"
       />
       <Box>
