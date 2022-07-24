@@ -40,8 +40,6 @@ export default function NftDetailPage() {
 
   const currentOwner = useMemo(() => {
     if (!owners) return null
-    console.log(owners)
-
     // TODO: Should handle NFT with multiple owners
     return owners[0].owner
   }, [owners])
