@@ -48,7 +48,9 @@ export default function NftDetailPage() {
     return <Box>Loading...</Box>
   }
 
-  if (isError) {
+  const { token, success } = data || {}
+
+  if (isError || !success) {
     notify('Error fetching this token')
     return <div>Error</div>
   }
@@ -60,7 +62,7 @@ export default function NftDetailPage() {
     attributes,
     ask,
     collection,
-  } = data as TokenType
+  } = token as TokenType
 
   return (
     <Layout>
@@ -82,6 +84,7 @@ export default function NftDetailPage() {
               md: 'row',
             }}
           >
+            {/* TODO: Support other media too */}
             <Image
               src={image?.src}
               height={{
