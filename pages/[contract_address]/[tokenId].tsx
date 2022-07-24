@@ -55,6 +55,11 @@ export default function NftDetailPage() {
     return <div>Error</div>
   }
 
+  if (!token) {
+    notify('Token not found')
+    return <div>Token not found</div>
+  }
+
   const {
     image,
     name,
@@ -62,7 +67,7 @@ export default function NftDetailPage() {
     attributes,
     ask,
     collection,
-  } = token as TokenType
+  } = token as TokenType || {}
 
   return (
     <Layout>

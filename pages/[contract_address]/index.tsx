@@ -20,12 +20,17 @@ const CollectionPage: NextPage = () => {
     return <div>Loading...</div>
   }
 
-  const { tokens }  = data || {}
-
   if (isError) {
     notify('Error fetching this collection')
     return <div>Error</div>
   }
+
+  if (!data) {
+    notify('Collection not found')
+    return <div>Collection not found</div>
+  }
+
+  const { tokens } = data || {}
 
   return (
     <Layout>
