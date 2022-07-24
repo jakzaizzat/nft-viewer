@@ -4,17 +4,21 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import Layout from '../components/Layout'
+import useNotify from '../hooks/useNotify'
 
 const Home: NextPage = () => {
   const [contractAddress, setContractAddress] = useState(
     '0x134460d32fc66a6d84487c20dcd9fdcf92316017', // Woodies NFT contract address
   )
+  const notify = useNotify()
   const router = useRouter()
 
   const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault()
-    console.log('submit')
-
+    if (!contractAddress) {
+      notify('Please enter a contract address')
+      return
+    }
     router.push(`/${contractAddress}`)
   }
 
