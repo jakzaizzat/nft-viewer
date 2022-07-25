@@ -1,5 +1,6 @@
-import { Box, Grid, GridItem } from '@chakra-ui/react'
+import { Box, Grid, GridItem, Heading } from '@chakra-ui/react'
 import type { NextPage } from 'next'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import FullPageScreen from '../../components/FullPageScreen'
 import Layout from '../../components/Layout'
@@ -30,6 +31,19 @@ const CollectionPage: NextPage = () => {
     return (
       <FullPageScreen>
         <Box>Error</Box>
+      </FullPageScreen>
+    )
+  }
+
+  if (!tokens || tokens.length === 0) {
+    return (
+      <FullPageScreen>
+        <Box>
+          <Heading size="md">Not found</Heading>
+          <Link href="/">
+            <a>Go back to the homepage</a>
+          </Link>
+        </Box>
       </FullPageScreen>
     )
   }

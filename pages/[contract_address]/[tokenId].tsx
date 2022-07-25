@@ -39,7 +39,7 @@ export default function NftDetailPage() {
   })
 
   const currentOwner = useMemo(() => {
-    if (!owners) return null
+    if (!owners || !token) return null
     // TODO: Should handle NFT with multiple owners
     return owners[0].owner
   }, [owners])
@@ -64,7 +64,12 @@ export default function NftDetailPage() {
   if (!token) {
     return (
       <FullPageScreen>
-        <Box>Not found</Box>
+        <Box>
+          <Heading size="md">Not found</Heading>
+          <Link href="/">
+            <a>Go back to the homepage</a>
+          </Link>
+        </Box>
       </FullPageScreen>
     )
   }

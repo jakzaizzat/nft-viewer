@@ -1,4 +1,5 @@
-import { Box, Heading } from '@chakra-ui/react'
+import { Box, Heading, Text } from '@chakra-ui/react'
+import Link from 'next/link'
 import FullPageScreen from '../../components/FullPageScreen'
 import Catch from './functional-error-boundary'
 
@@ -13,9 +14,12 @@ const MyErrorBoundary = Catch(function MyErrorBoundary(
   if (error) {
     return (
       <FullPageScreen>
-        <Box>
+        <Box fontFamily="sans-serif">
           <Heading>An error has occured</Heading>
-          <Heading>{error.message}</Heading>
+          <Text>{error.message}</Text>
+          <Link href="/">
+            <a>Go back to the homepage</a>
+          </Link>
         </Box>
       </FullPageScreen>
     )

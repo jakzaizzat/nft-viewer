@@ -12,6 +12,7 @@ export default function useCollections(contractAddress: string) {
     },
     {
       enabled: !!contractAddress,
+      useErrorBoundary: true,
     },
   )
 }
