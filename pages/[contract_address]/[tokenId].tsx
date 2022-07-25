@@ -51,6 +51,11 @@ export default function NftDetailPage() {
     notify('Error fetching this token')
     return <div>Error</div>
   }
+
+  if (!token) {
+    notify('Token not found')
+    return <div>Not found</div>
+  }
  
   return (
     <Layout>
@@ -74,7 +79,7 @@ export default function NftDetailPage() {
           >
             {/* TODO: Support other media too */}
             <Image
-              src={token.image?.src}
+              src={token?.image?.src}
               height={{
                 base: 'auto',
                 md: '300px',
