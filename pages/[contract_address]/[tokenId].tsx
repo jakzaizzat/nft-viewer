@@ -42,7 +42,7 @@ export default function NftDetailPage() {
     if (!owners || !token) return null
     // TODO: Should handle NFT with multiple owners
     return owners[0].owner
-  }, [owners])
+  }, [owners, token])
 
   if (isFetching) {
     return (
