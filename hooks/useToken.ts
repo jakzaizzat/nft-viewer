@@ -9,11 +9,11 @@ export default function useToken({ contractAddress, tokenId }: Props) {
   return useQuery(
     ['token', { contractAddress, tokenId }],
     async () => {
-      const response = await fetch(
+      const { token } = await fetch(
         `/api/collection/${contractAddress}/${tokenId}`,
       ).then((res) => res.json())
 
-      return response
+      return token
     },
     {
       enabled: !!tokenId,

@@ -12,7 +12,7 @@ const CollectionPage: NextPage = () => {
   const notify = useNotify()
 
   const { contract_address } = router.query
-  const { data, isFetching, isError } = useCollections(
+  const { data: tokens, isFetching, isError } = useCollections(
     contract_address as string,
   )
 
@@ -24,8 +24,6 @@ const CollectionPage: NextPage = () => {
     notify('Error fetching this collection')
     return <div>Error</div>
   }
-
-  const { tokens } = data || {}
 
   return (
     <Layout>

@@ -28,7 +28,7 @@ export default function NftDetailPage() {
   const { tokenId, contract_address } = router.query
   const notify = useNotify()
 
-  const { data, isError, isFetching, isSuccess } = useToken({
+  const { data: token, isError, isFetching, isSuccess } = useToken({
     contractAddress: contract_address as string,
     tokenId: tokenId as string,
   })
@@ -48,28 +48,19 @@ export default function NftDetailPage() {
     return <Box>Loading...</Box>
   }
 
-  const { token } = data || {}
-
-  if (isError) {
+  if (isError || !token) {
     notify('Error fetching this token')
     return <div>Error</div>
   }
-  
-  const {
-    image,
-    name,
-    description,
-    attributes,
-    ask,
-    collection,
-  } = token as TokenType || {}
+ 
+  const { image, name, description, attributes, ask, collection } = token || {}
 
   return (
     <Layout>
       <Breadcrumb mb={4}>
         <BreadcrumbItem>
           <BreadcrumbLink as={Link} href={`/${contract_address}`}>
-            {collection.name}
+            {collection?.name || 'Collection'}
           </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbItem isCurrentPage>
