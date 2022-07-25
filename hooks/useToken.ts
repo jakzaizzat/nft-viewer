@@ -20,6 +20,7 @@ export default function useToken({ contractAddress, tokenId }: Props) {
       enabled: !!tokenId,
       refetchOnWindowFocus: false,
       refetchOnMount: false,
+      useErrorBoundary: true,
     },
   )
 }
