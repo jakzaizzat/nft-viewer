@@ -1,6 +1,7 @@
 import { Box, Grid, GridItem } from '@chakra-ui/react'
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
+import FullPageScreen from '../../components/FullPageScreen'
 import Layout from '../../components/Layout'
 import Nft from '../../components/Nft'
 import useCollections from '../../hooks/useCollections'
@@ -17,12 +18,20 @@ const CollectionPage: NextPage = () => {
   )
 
   if (isFetching) {
-    return <div>Loading...</div>
+    return (
+      <FullPageScreen>
+        <Box>Loading...</Box>
+      </FullPageScreen>
+    )
   }
 
   if (isError) {
     notify('Error fetching this collection')
-    return <div>Error</div>
+    return (
+      <FullPageScreen>
+        <Box>Error</Box>
+      </FullPageScreen>
+    )
   }
 
   return (

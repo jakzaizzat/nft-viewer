@@ -1,4 +1,5 @@
 import { Box, Heading } from '@chakra-ui/react'
+import FullPageScreen from '../../components/FullPageScreen'
 import Catch from './functional-error-boundary'
 
 type Props = {
@@ -6,26 +7,20 @@ type Props = {
 }
 
 const MyErrorBoundary = Catch(function MyErrorBoundary(
-  props: Props,
+  { children }: Props,
   error?: Error,
 ) {
   if (error) {
     return (
-      <Box
-        h="100vh"
-        w="100vw"
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-      >
+      <FullPageScreen>
         <Box>
           <Heading>An error has occured</Heading>
           <Heading>{error.message}</Heading>
         </Box>
-      </Box>
+      </FullPageScreen>
     )
   } else {
-    return <>{props.children}</>
+    return <>{children}</>
   }
 })
 

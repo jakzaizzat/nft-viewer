@@ -13,6 +13,7 @@ import {
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
+import FullPageScreen from '../../components/FullPageScreen'
 import Layout from '../../components/Layout'
 import AttributesList from '../../components/Token/AttributesList'
 import TokenCollection from '../../components/Token/TokenCollection'
@@ -44,19 +45,30 @@ export default function NftDetailPage() {
   }, [owners])
 
   if (isFetching) {
-    return <Box>Loading...</Box>
+    return (
+      <FullPageScreen>
+        <Box>Loading...</Box>
+      </FullPageScreen>
+    )
   }
 
   if (isError) {
     notify('Error fetching this token')
-    return <div>Error</div>
+    return (
+      <FullPageScreen>
+        <Box>Error</Box>
+      </FullPageScreen>
+    )
   }
 
   if (!token) {
-    notify('Token not found')
-    return <div>Not found</div>
+    return (
+      <FullPageScreen>
+        <Box>Not found</Box>
+      </FullPageScreen>
+    )
   }
- 
+
   return (
     <Layout>
       <Breadcrumb mb={4}>
