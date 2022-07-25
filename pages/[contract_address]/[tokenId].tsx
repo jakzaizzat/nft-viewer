@@ -28,7 +28,7 @@ export default function NftDetailPage() {
   const { tokenId, contract_address } = router.query
   const notify = useNotify()
 
-  const { data: token, isError, isFetching } = useToken({
+  const { data: token, isError, isLoading } = useToken({
     contractAddress: contract_address as string,
     tokenId: tokenId as string,
   })
@@ -44,7 +44,7 @@ export default function NftDetailPage() {
     return owners[0].owner
   }, [owners, token])
 
-  if (isFetching) {
+  if (isLoading) {
     return (
       <FullPageScreen>
         <Box>Loading...</Box>
