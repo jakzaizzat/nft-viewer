@@ -6,7 +6,7 @@ type Props = {
 }
 
 const Boundary = memo(({ children }: Props) => (
-  <Suspense fallback={<div>Loading asdasdasd...</div>}>
+  <Suspense fallback={<div>Loading...</div>}>
     <ErrorBoundary>{children}</ErrorBoundary>
   </Suspense>
 ))
