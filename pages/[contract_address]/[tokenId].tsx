@@ -13,6 +13,7 @@ import {
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
+import FullPageScreen from '../../components/FullPageScreen'
 import Layout from '../../components/Layout'
 import AttributesList from '../../components/Token/AttributesList'
 import TokenCollection from '../../components/Token/TokenCollection'
@@ -21,14 +22,13 @@ import TokenPrice from '../../components/Token/TokenPrice'
 import useNotify from '../../hooks/useNotify'
 import useToken from '../../hooks/useToken'
 import useTokenOwner from '../../hooks/useTokenOwner'
-import { TokenType } from '../../types'
 
 export default function NftDetailPage() {
   const router = useRouter()
   const { tokenId, contract_address } = router.query
   const notify = useNotify()
 
-  const { data, isError, isFetching, isSuccess } = useToken({
+  const { data: token, isError, isFetching } = useToken({
     contractAddress: contract_address as string,
     tokenId: tokenId as string,
   })
@@ -39,37 +39,47 @@ export default function NftDetailPage() {
   })
 
   const currentOwner = useMemo(() => {
-    if (!owners) return null
+    if (!owners || !token) return null
     // TODO: Should handle NFT with multiple owners
     return owners[0].owner
-  }, [owners])
+  }, [owners, token])
 
   if (isFetching) {
-    return <Box>Loading...</Box>
+    return (
+      <FullPageScreen>
+        <Box>Loading...</Box>
+      </FullPageScreen>
+    )
   }
-
-  const { token } = data || {}
 
   if (isError) {
     notify('Error fetching this token')
-    return <div>Error</div>
+    return (
+      <FullPageScreen>
+        <Box>Error</Box>
+      </FullPageScreen>
+    )
   }
-  
-  const {
-    image,
-    name,
-    description,
-    attributes,
-    ask,
-    collection,
-  } = token as TokenType || {}
+
+  if (!token) {
+    return (
+      <FullPageScreen>
+        <Box>
+          <Heading size="md">Not found</Heading>
+          <Link href="/">
+            <a>Go back to the homepage</a>
+          </Link>
+        </Box>
+      </FullPageScreen>
+    )
+  }
 
   return (
     <Layout>
       <Breadcrumb mb={4}>
         <BreadcrumbItem>
           <BreadcrumbLink as={Link} href={`/${contract_address}`}>
-            {collection.name}
+            {token?.collection?.name || 'Collection'}
           </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbItem isCurrentPage>
@@ -86,7 +96,7 @@ export default function NftDetailPage() {
           >
             {/* TODO: Support other media too */}
             <Image
-              src={image?.src}
+              src={token?.image?.src}
               height={{
                 base: 'auto',
                 md: '300px',
@@ -106,10 +116,10 @@ export default function NftDetailPage() {
               gap={4}
             >
               <Heading size="xl" color="gray.600" mb={4}>
-                {name}
+                {token.name}
               </Heading>
-              <Text mb={4}>{description}</Text>
-              {ask && <TokenPrice ask={ask} />}
+              <Text mb={4}>{token.description}</Text>
+              {token.ask && <TokenPrice ask={token.ask} />}
               <Button
                 as="a"
                 href={`https://looksrare.org/collections/${contract_address}/${tokenId}`}
@@ -122,11 +132,11 @@ export default function NftDetailPage() {
                   bg: 'green.600',
                 }}
               >
-                {ask ? 'Buy' : 'View'} on LooksRare
+                {token.ask ? 'Buy' : 'View'} on LooksRare
               </Button>
               <Grid gap={4}>
                 <TokenOwnerSection address={currentOwner?.address} />
-                <TokenCollection collection={collection} />
+                <TokenCollection collection={token.collection} />
               </Grid>
             </Box>
           </Flex>
@@ -141,7 +151,7 @@ export default function NftDetailPage() {
             >
               Attributes
             </Text>
-            <AttributesList attributes={attributes} />
+            <AttributesList attributes={token.attributes} />
           </Box>
         </Box>
       </Flex>

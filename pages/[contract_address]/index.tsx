@@ -1,6 +1,8 @@
-import { Box, Grid, GridItem } from '@chakra-ui/react'
+import { Box, Grid, GridItem, Heading } from '@chakra-ui/react'
 import type { NextPage } from 'next'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
+import FullPageScreen from '../../components/FullPageScreen'
 import Layout from '../../components/Layout'
 import Nft from '../../components/Nft'
 import useCollections from '../../hooks/useCollections'
@@ -12,20 +14,39 @@ const CollectionPage: NextPage = () => {
   const notify = useNotify()
 
   const { contract_address } = router.query
-  const { data, isFetching, isError } = useCollections(
+  const { data: tokens, isFetching, isError } = useCollections(
     contract_address as string,
   )
 
   if (isFetching) {
-    return <div>Loading...</div>
+    return (
+      <FullPageScreen>
+        <Box>Loading...</Box>
+      </FullPageScreen>
+    )
   }
 
   if (isError) {
     notify('Error fetching this collection')
-    return <div>Error</div>
+    return (
+      <FullPageScreen>
+        <Box>Error</Box>
+      </FullPageScreen>
+    )
   }
 
-  const { tokens } = data || {}
+  if (!tokens || tokens.length === 0) {
+    return (
+      <FullPageScreen>
+        <Box>
+          <Heading size="md">Not found</Heading>
+          <Link href="/">
+            <a>Go back to the homepage</a>
+          </Link>
+        </Box>
+      </FullPageScreen>
+    )
+  }
 
   return (
     <Layout>

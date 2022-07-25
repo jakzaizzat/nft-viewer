@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { TokenType } from '../types'
 
 type Props = {
   contractAddress: string
@@ -6,19 +7,20 @@ type Props = {
 }
 
 export default function useToken({ contractAddress, tokenId }: Props) {
-  return useQuery(
+  return useQuery<TokenType>(
     ['token', { contractAddress, tokenId }],
     async () => {
-      const response = await fetch(
+      const { token } = await fetch(
         `/api/collection/${contractAddress}/${tokenId}`,
       ).then((res) => res.json())
 
-      return response
+      return token
     },
     {
       enabled: !!tokenId,
       refetchOnWindowFocus: false,
       refetchOnMount: false,
+      useErrorBoundary: true,
     },
   )
 }

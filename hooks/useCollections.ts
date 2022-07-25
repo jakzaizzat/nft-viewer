@@ -4,14 +4,15 @@ export default function useCollections(contractAddress: string) {
   return useQuery(
     ['collections', { contractAddress }],
     async () => {
-      const response = await fetch(
+      const { tokens } = await fetch(
         `/api/collection/${contractAddress}`,
       ).then((res) => res.json())
 
-      return response
+      return tokens
     },
     {
       enabled: !!contractAddress,
+      useErrorBoundary: true,
     },
   )
 }
