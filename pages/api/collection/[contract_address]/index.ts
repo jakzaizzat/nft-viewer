@@ -49,7 +49,6 @@ export default async function handler(
       tokens,
     })
   } catch (error: any) {
-    console.error(error)
     res.status(500).send({
       success: false,
       tokens: [],
