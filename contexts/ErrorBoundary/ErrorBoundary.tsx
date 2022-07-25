@@ -7,7 +7,7 @@ type Props = {
   children: React.ReactNode
 }
 
-const MyErrorBoundary = Catch(function MyErrorBoundary(
+const ErrorBoundary = Catch(function ErrorBoundary(
   { children }: Props,
   error?: Error,
 ) {
@@ -28,4 +28,4 @@ const MyErrorBoundary = Catch(function MyErrorBoundary(
   }
 })
 
-export default MyErrorBoundary
+export default ErrorBoundary

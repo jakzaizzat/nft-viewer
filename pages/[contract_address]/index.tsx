@@ -14,11 +14,11 @@ const CollectionPage: NextPage = () => {
   const notify = useNotify()
 
   const { contract_address } = router.query
-  const { data: tokens, isFetching, isError } = useCollections(
+  const { data: tokens, isLoading, isError } = useCollections(
     contract_address as string,
   )
 
-  if (isFetching) {
+  if (isLoading) {
     return (
       <FullPageScreen>
         <Box>Loading...</Box>
@@ -55,7 +55,7 @@ const CollectionPage: NextPage = () => {
           templateColumns={{
             base: '1fr',
             md: 'repeat(2, 1fr)',
-            lg: 'repeat(3, 1fr)',
+            lg: 'repeat(4, 1fr)',
           }}
           gap={6}
         >

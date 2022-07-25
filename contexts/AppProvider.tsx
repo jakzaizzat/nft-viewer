@@ -1,6 +1,6 @@
 import { ChakraProvider } from '@chakra-ui/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import MyErrorBoundary from './ErrorBoundary/ErrorBoundary'
+import Boundary from './ErrorBoundary/Boundary'
 import RainbowkitContext from './RainbowkitContext'
 
 type Props = {
@@ -11,12 +11,12 @@ export default function AppProvider({ children }: Props) {
   const queryClient = new QueryClient()
 
   return (
-    <MyErrorBoundary>
+    <Boundary>
       <RainbowkitContext>
         <QueryClientProvider client={queryClient}>
           <ChakraProvider>{children}</ChakraProvider>
         </QueryClientProvider>
       </RainbowkitContext>
-    </MyErrorBoundary>
+    </Boundary>
   )
 }
